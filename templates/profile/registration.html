@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block styles %}
+
+
+{% endblock %}
+{% block title%}Регистрация{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid bg-light py-5">
+    <div class="col-md-6 m-auto text-center">
+      <h1 class="h1">Регистрация</h1>
+        <div class="row py-5">
+          <form class="col-md-9 m-auto" method="post" role="form" style="width: 400px;">
+            <div class="mb-3">
+              {% csrf_token %}
+              <label for="inputname">Логин</label>
+              {{ form.username }}
+              <!-- <input type="text" class="form-control mt-1" id="username" name="username" placeholder="Логин"> -->
+            </div>
+            <div class="mb-3">
+                <label for="inputfirstname">Имя</label>
+                {{ form.first_name }}
+                <!-- <input type="text" class="form-control mt-1" id="first_name" name="first_name" placeholder="Имя"> -->
+              </div>
+              <div class="mb-3">
+                <label for="inputlastname">Фамилия</label>
+                {{ form.last_name }}
+                <!-- <input type="text" class="form-control mt-1" id="last_name" name="last_name" placeholder="Фамилия"> -->
+              </div>
+              <div class="mb-3">
+                <label for="inputemail">Почта</label>
+                {{ form.email }}
+                <!-- <input type="text" class="form-control mt-1" id="email" name="email" placeholder="Почта"> -->
+              </div>
+            <div class="mb-3">
+              <label for="inputpassword">Пароль</label>
+              {{ form.password }}
+              <!-- <input type="text" class="form-control mt-1" id="password" name="password" placeholder="Пароль"> -->
+            </div>
+            <div class="mb-3">
+                <label for="inputpassword">Повторите пароль</label>
+                <input type="password" class="form-control mt-1" id="password2" name="password2" placeholder="Пароль">
+              </div>
+                <button type="submit" class="btn btn-success btn-lg px-3">Зарегистрироваться</button>
+          </form>
+        </div>
+      <p>
+        Уже зарегистрированы на на нашем сайте? <a href="/registration">Войти в аккаунт!</a>
+      </p>
+    </div>
+  </div>
+
+{% endblock %}
+{% block scripts %}
+
+
+
+{% endblock %}
