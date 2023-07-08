@@ -74,7 +74,7 @@
     <nav class="navbar navbar-expand-lg navbar-light shadow">
         <div class="container d-flex justify-content-between align-items-center">
 
-            <a class="navbar-brand text-success logo h1 align-self-center" href="index.html">
+            <a class="navbar-brand text-success logo h1 align-self-center" href="/">
                 Mir
             </a>
 
@@ -168,13 +168,15 @@
                 <div class="col-md-4 pt-5">
                     <h2 class="h2 text-light border-bottom pb-3 border-light">Продукты</h2>
                     <ul class="list-unstyled text-light footer-link-list">
-                        <li><a class="text-decoration-none" href="#">Люксовые</a></li>
-                        <li><a class="text-decoration-none" href="#">Спортивная Одежда</a></li>
+                        {% for i in category%}
+                        <li><a class="text-decoration-none" href="#">{{ i.name }}</a></li>
+                        {% endfor %}
+                        <!-- <li><a class="text-decoration-none" href="#">Спортивная Одежда</a></li>
                         <li><a class="text-decoration-none" href="#">Мужская Обувь</a></li>
                         <li><a class="text-decoration-none" href="#">Женская Обувь</a></li>
                         <li><a class="text-decoration-none" href="#">Популярная Одежда</a></li>
                         <li><a class="text-decoration-none" href="#">Аксессуары для спорта</a></li>
-                        <li><a class="text-decoration-none" href="#">Спортивная Обувь</a></li>
+                        <li><a class="text-decoration-none" href="#">Спортивная Обувь</a></li> -->
                     </ul>
                 </div>
 

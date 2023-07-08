@@ -23,7 +23,8 @@ def slugify_function(content):
     return slugify(content)
 
 class SizeChoices(models.Model):
-    size = models.CharField(max_length=10, verbose_name='Размер')
+    size = models.CharField(max_length=10, 
+                            verbose_name='Размер')
     
     def __str__(self) -> str:
         return self.size
@@ -31,6 +32,18 @@ class SizeChoices(models.Model):
     class Meta:
         verbose_name = 'Размер'
         verbose_name_plural = 'Размеры'
+        
+        
+class ColorChoices(models.Model):
+    color = models.CharField(max_length=100, 
+                             verbose_name='Цвет')
+    
+    def __str__(self) -> str:
+        return self.color
+    
+    class Meta:
+        verbose_name = 'Цвет'
+        verbose_name_plural = 'Цвета'
         
 
 class Profile(models.Model):
@@ -64,8 +77,11 @@ class Profile(models.Model):
     
 
 class Category(models.Model):
-    name = models.CharField(max_length=100, verbose_name='Название')
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата добавления')
+    name = models.CharField(max_length=100, 
+                            verbose_name='Название')
+    
+    created_at = models.DateTimeField(auto_now_add=True, 
+                                      verbose_name='Дата добавления')
     
     def __str__(self) -> str:
         return f'{self.name}'
@@ -77,18 +93,43 @@ class Category(models.Model):
 
 
 class Product(models.Model):
-    image = models.ImageField(upload_to='product_image/', verbose_name='Изображение')
-    name = models.CharField(max_length=100, verbose_name='Название')
-    brand = models.CharField(max_length=50, verbose_name='Бренд')
-    category = models.ForeignKey(Category, on_delete=models.PROTECT, verbose_name='Категория')
+    image = models.ImageField(upload_to='product_image/', 
+                              verbose_name='Изображение')
+    
+    name = models.CharField(max_length=100, 
+                            verbose_name='Название')
+    
+    brand = models.CharField(max_length=50, 
+                             verbose_name='Бренд')
+    
+    category = models.ForeignKey(Category, 
+                                 on_delete=models.PROTECT, 
+                                 verbose_name='Категория')
+    
     price = models.PositiveBigIntegerField(verbose_name='Цена')
+    
     description = models.TextField(verbose_name='Описание')
-    slug = AutoSlugField(populate_from=slugify_function, unique=True, editable=False)
-    size = models.ManyToManyField(SizeChoices, verbose_name='Размер')
-    gender = models.CharField(max_length=20, choices=GENDER_CHOICES, verbose_name='Пол')
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата добвления')
     
+    slug = AutoSlugField(populate_from=slugify_function, 
+                         unique=True, 
+                         editable=False)
     
+    color = models.ManyToManyField(ColorChoices, 
+                                   verbose_name='Цвет')
+    
+    size = models.ManyToManyField(SizeChoices, 
+                                  verbose_name='Размер', 
+                                  blank=True, 
+                                  null=True)
+    
+    gender = models.CharField(max_length=20, 
+                              choices=GENDER_CHOICES, 
+                              verbose_name='Пол')
+    
+    created_at = models.DateTimeField(auto_now_add=True, 
+                                      verbose_name='Дата добвления')
+    
+
     def __str__(self) -> str:
         return f'{self.name} {self.brand} {self.price}'
     
@@ -98,11 +139,19 @@ class Product(models.Model):
     
     
 class Comments(models.Model):
-    user = models.ForeignKey(Profile, on_delete=models.PROTECT, verbose_name='Пользователь')
+    user = models.ForeignKey(Profile, 
+                             on_delete=models.PROTECT, 
+                             verbose_name='Пользователь')
+
     rating = models.PositiveSmallIntegerField(verbose_name='Рейтинг')
-    comments = models.TextField(max_length=1000, verbose_name='Комментарий')
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Продукт')
-    
+
+    comments = models.TextField(max_length=1000, 
+                                verbose_name='Комментарий')
+
+    product = models.ForeignKey(Product, 
+                                on_delete=models.CASCADE, 
+                                verbose_name='Продукт')
+
     def __str__(self) -> str:
         return f'{self.product} {self.user} {self.rating}'
     

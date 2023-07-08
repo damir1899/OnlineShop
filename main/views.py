@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.db.models import Avg
+from django.core.paginator import Paginator
 
 from .forms import UserForm
 from .models import (Profile,
@@ -11,27 +12,46 @@ from .models import (Profile,
 
 
 def IndexView(request):
-    return render(request, 'main/index.html')
+    ''' Представление для отображения главной страницы'''
+    
+    category = Category.objects.all()
+    
+    return render(request, 'main/index.html', {'category': category})
 
 
 def AboutView(request):
-    return render(request, 'main/about.html')
+    ''' Представление для отображения страницы "О нас" '''
+    category = Category.objects.all()
+    
+    return render(request, 'main/about.html', {'category': category})
 
 
 def ShopView(request):
+    ''' Представление для отображения страницы "Магазин" '''
+    # Берем обьекты для отображения на странцие
     product = Product.objects.all()
     category = Category.objects.all()
     comments = Comments.objects.all()
-    # average = Comments.objects.aggregate(avg=Avg('rating'))
     
+    # Пагинация продуктов
+    paginator = Paginator(product, 9)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    # Создаем словарь для передачи данных на страницу
     context = {
         'product': product,
         'category': category,
-        'comments': comments
+        'comments': comments,
+        'page_obj': page_obj
     }
+    
     return render(request, 'main/shop.html', context=context)
 
+
 def ProductDetailView(request, slug):
+    ''' Представлние для отображения страницы одного продукта'''
+    # Передаем обьект обьект который равен слагу продукта из базы
     product = get_object_or_404(Product, slug=slug)
     
     context = {
@@ -41,7 +61,10 @@ def ProductDetailView(request, slug):
 
 
 def ContactsView(request):
-    return render(request, 'main/contacts.html')
+    
+    category = Category.objects.all()
+    
+    return render(request, 'main/contacts.html', {'category': category})
 
 
 def ProfileUserView(request):

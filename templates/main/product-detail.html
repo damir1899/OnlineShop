@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title%}Магазин{% endblock %}
+{% block title%}{{ product.brand}} {{ product.name }}{% endblock %}
 
 {% block styles %}
 
@@ -18,7 +18,7 @@
         <div class="row">
             <div class="col-lg-5 mt-5">
                 <div class="card mb-3">
-                    <img class="card-img img-fluid" src="{% static 'img/product_single_10.jpg' %}" alt="Card image cap" id="product-detail">
+                    <img class="card-img img-fluid" src="{{ product.image.url }}" alt="Card image cap" id="product-detail">
                 </div>
                 <div class="row">
                     <!--Start Controls-->
@@ -142,9 +142,11 @@
                             <li class="list-inline-item">
                                 <h6>Avaliable Color :</h6>
                             </li>
+                            {% for color in product.color.all %}
                             <li class="list-inline-item">
-                                <p class="text-muted"><strong>White / Black</strong></p>
+                                <p class="text-muted"><strong>{{ color }}</strong></p>
                             </li>
+                            {% endfor %}
                         </ul>
 
                         <h6>Specification:</h6>
@@ -166,10 +168,12 @@
                                         <li class="list-inline-item">Size :
                                             <input type="hidden" name="product-size" id="product-size" value="S">
                                         </li>
-                                        <li class="list-inline-item"><span class="btn btn-success btn-size">S</span></li>
-                                        <li class="list-inline-item"><span class="btn btn-success btn-size">M</span></li>
+                                        {% for i in product.size.all %}
+                                        <li class="list-inline-item"><span class="btn btn-success btn-size">{{ i }}</span></li>
+                                        {% endfor %}
+                                        <!-- <li class="list-inline-item"><span class="btn btn-success btn-size">M</span></li>
                                         <li class="list-inline-item"><span class="btn btn-success btn-size">L</span></li>
-                                        <li class="list-inline-item"><span class="btn btn-success btn-size">XL</span></li>
+                                        <li class="list-inline-item"><span class="btn btn-success btn-size">XL</span></li> -->
                                     </ul>
                                 </div>
                                 <div class="col-auto">
