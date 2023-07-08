@@ -1,3 +1,7 @@
-from django.test import TestCase
+# from django.test import TestCase
+# from .models import Comments
 
-# Create your tests here.
+# comments = Comments.objects.all()
+
+# for i in comments.rating:
+#     print(i)

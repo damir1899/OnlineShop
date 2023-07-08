@@ -1,8 +1,13 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
+from django.db.models import Avg
 
-from main.forms import UserForm
+from .forms import UserForm
+from .models import (Profile,
+                     Category,
+                     Product,
+                     Comments)
 
 
 def IndexView(request):
@@ -14,10 +19,25 @@ def AboutView(request):
 
 
 def ShopView(request):
-    return render(request, 'main/shop.html')
+    product = Product.objects.all()
+    category = Category.objects.all()
+    comments = Comments.objects.all()
+    # average = Comments.objects.aggregate(avg=Avg('rating'))
+    
+    context = {
+        'product': product,
+        'category': category,
+        'comments': comments
+    }
+    return render(request, 'main/shop.html', context=context)
 
-def ProductDetailView(request):
-    return render(request, 'main/product-detail.html')
+def ProductDetailView(request, slug):
+    product = get_object_or_404(Product, slug=slug)
+    
+    context = {
+        'product': product
+    }
+    return render(request, 'main/product-detail.html', context=context)
 
 
 def ContactsView(request):
@@ -25,15 +45,21 @@ def ContactsView(request):
 
 
 def ProfileUserView(request):
-    return render(request, 'profile/profile.html')
+    ''' Представление для отображения информациий на странице профиля'''
+    if request.user.is_authenticated:
+        profile = Profile.objects.get(user=request.user)
+        context = {
+            'profile': profile
+        }
+        return render(request, 'profile/profile.html', context=context)
+    else:
+        return redirect('/login')
 
 
 def LoginUserView(request):
     if request.method == "POST":
         username = request.POST.get("username")
-        print(username)
         password = request.POST.get("password")
-        print(password)
         if username and password:
             try:
                 user = authenticate(request, username=username, password=password)
@@ -51,6 +77,13 @@ def LoginUserView(request):
     return render(request, 'profile/login.html')
 
 
+# Выход с аккаунта
+def LogoutUserView(request):
+    logout(request)
+    return redirect('/')
+
+
+# Функция для регистраций пользователя
 def RegistrationUserView(request):
     if request.method == 'POST':
         form = UserForm(request.POST)

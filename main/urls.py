@@ -6,7 +6,8 @@ from .views import (IndexView,
                     ProfileUserView, 
                     LoginUserView, 
                     RegistrationUserView,
-                    ProductDetailView)
+                    ProductDetailView,
+                    LogoutUserView)
 
 urlpatterns = [
     path('', IndexView),
@@ -16,6 +17,7 @@ urlpatterns = [
     path('profile/', ProfileUserView),
     path('login/', LoginUserView),
     path('registration/', RegistrationUserView),
-    path('product_detail/', ProductDetailView),
+    path('logout/', LogoutUserView),
+    path('shop/<slug:slug>/', ProductDetailView, name='product_detail'),
 
 ]
