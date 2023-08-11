@@ -1,5 +1,7 @@
-from django.forms import ModelForm, TextInput, EmailInput, PasswordInput
+from django.forms import ModelForm, TextInput, EmailInput, PasswordInput, FileInput
 from django.contrib.auth.models import User
+
+from .models import Profile
 
 class UserForm(ModelForm):
     class Meta:
@@ -35,5 +37,30 @@ class UserForm(ModelForm):
                 'id': 'password',
                 'name': 'password',
                 'placeholder': 'Пароль',
+            }),
+        }
+        
+
+class ProfileEditForm(ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['image', 'phone', 'address']
+        widgets = {
+            'image': FileInput(attrs={
+                'style': 'width: 145px; margin: 40px;',
+                'class': 'form-control text-bg-dark',
+                'placeholder': 'Изображение',
+            }),
+            'phone': TextInput(attrs={
+                'class': 'form-control mt-1',
+                'id': 'phone',
+                'name': 'phone',
+                'placeholder': 'Номер телефона'
+            }),
+            'address': TextInput(attrs={
+                'class': 'form-control mt-1',
+                'id': 'address',
+                'name': 'address',
+                'placeholder': 'Адрес'
             }),
         }

@@ -53,7 +53,7 @@ class Profile(models.Model):
     
     image = models.ImageField(upload_to='profile_img/', 
                               verbose_name='Фото профиля', 
-                              default='img/shop_01-01.jpg')
+                              null=True, blank=True)
     
     phone = models.CharField(max_length=20, 
                              verbose_name='Номер телефона', 

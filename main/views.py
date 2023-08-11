@@ -4,7 +4,8 @@ from django.contrib import messages
 from django.db.models import Avg
 from django.core.paginator import Paginator
 
-from .forms import UserForm
+from .forms import (UserForm,
+                    ProfileEditForm)
 from .models import (Profile,
                      Category,
                      Product,
@@ -38,6 +39,21 @@ def ShopView(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     
+    # Сортировка продуктов 
+    if request.method == 'GET':
+        sort_by_name = request.GET.get('sort_by_name')
+        sort_by_price = request.GET.get('sort_by_price')
+        sort_by_brand = request.GET.get('sort_by_brand')
+        
+        if sort_by_name:
+            product = Product.objects.order_by('name')
+            
+        if sort_by_brand:
+            product = Product.objects.order_by('brand')
+            
+        if sort_by_price:
+            product = Product.objects.order_by('price')
+    
     # Создаем словарь для передачи данных на страницу
     context = {
         'product': product,
@@ -51,7 +67,9 @@ def ShopView(request):
 
 def ProductDetailView(request, slug):
     ''' Представлние для отображения страницы одного продукта'''
-    # Передаем обьект обьект который равен слагу продукта из базы
+    
+    # Передаем обьект который равен слагу продукта 
+    # из базы для отоюражения деталей продукта
     product = get_object_or_404(Product, slug=slug)
     
     context = {
@@ -61,6 +79,7 @@ def ProductDetailView(request, slug):
 
 
 def ContactsView(request):
+    ''' Представление для отображения страницы контактов и для связи'''
     
     category = Category.objects.all()
     
@@ -124,4 +143,28 @@ def RegistrationUserView(request):
         form = UserForm()
         
     return render(request, 'profile/registration.html', {'form': form})
+
+
+def ProfileEditView(request):
+    
+    '''Представления для редактирования пользователя'''
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            FormProfile = ProfileEditForm(request.POST, request.FILES, instance=request.user.profile)
+            FormUser = UserForm(request.POST, request.FILES, instance=request.user)
+            
+            if FormProfile.is_valid() and FormUser.is_valid():
+                FormProfile.save()
+                FormUser.save()
+                messages.success(request, 'Редактирование прошло успешно')
+                return redirect('/profile')
+            
+            
+    FormProfile = ProfileEditForm(instance=request.user.profile)
+    FormUser = UserForm(instance=request.user)
+    context = {
+        'FormProfile': FormProfile,
+        'FormUser': FormUser,
+    }
+    return render(request, 'profile/edit-profile.html', context=context)
 

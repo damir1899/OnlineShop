@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block styles %}
+
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+
+{% endblock %}
+{% block title%}Профиль{% endblock %}
+
+{% block content %}
+
+<form method="post" enctype="multipart/form-data">
+<div class="container">
+    <div class="main-body" style="margin: 200px;">
+        <div class="row gutters-sm">
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex flex-column align-items-center text-center">
+                                {% if profile.image.url is not None %}
+                                <img src="{{ profile.image.url }}" alt="Admin""
+                                class=" rounded-circle" width="150">
+                                {% csrf_token %}
+                                {{ FormProfile.image }}
+                                {% else %}
+                                <img src="{% static 'images/noimage.png' %}" alt="Admin""
+                                class=" rounded-circle" width="150">
+                                {% csrf_token %}
+                                {{ FormProfile.image }}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Логин</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    {% csrf_token %}
+                                    {{ FormUser.username }}
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Имя</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    {{ FormUser.first_name }}
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Фамилия</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    {{ FormUser.last_name }}
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Почта</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    {{ FormUser.email }}
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Номер телефона</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    {{ FormProfile.phone }}
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Адрес</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    {{ FormProfile.address }}
+                                </div>
+                            </div>
+                            <hr>
+                            <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+{% endblock %}
